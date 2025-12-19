@@ -265,9 +265,11 @@ void WebSocketsClient::loop(void) {
                 DEBUG_WEBSOCKETS("[WS-Client] setting CA certificate\n");
 #if defined(ESP32)
                 if(_client_cert && _client_key) {
+                    DEBUG_WEBSOCKETS("[WS-Client] setting client certificate and private key\n");
                     _client.ssl->setCertificate(_client_cert);
                     _client.ssl->setPrivateKey(_client_key);
-                    DEBUG_WEBSOCKETS("[WS-Client] no client certificate and key set\n");
+                } else {
+                    DEBUG_WEBSOCKETS("[WS-Client] no client certificate and/or private key set\n");
                 }
                 _client.ssl->setCACert(_CA_cert);
 #elif defined(ESP8266) && defined(SSL_AXTLS)
@@ -298,8 +300,10 @@ void WebSocketsClient::loop(void) {
                 _client.ssl->setInsecure();
             }
             if(_client_cert && _client_key) {
+                DEBUG_WEBSOCKETS("[WS-Client] setting client certificate and private key\n");
                 _client.ssl->setClientRSACert(_client_cert, _client_key);
-                DEBUG_WEBSOCKETS("[WS-Client] setting client certificate and key\n");
+            } else {
+                DEBUG_WEBSOCKETS("[WS-Client] no client certificate and/or private key set\n");
 #endif
             }
         } else {
